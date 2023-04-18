@@ -1,0 +1,3 @@
+function foo(var1: number, var2: string) {
+
+}
