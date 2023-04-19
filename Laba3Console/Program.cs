@@ -28,10 +28,12 @@ namespace Laba3Console
         {
             public Group group;
             public bool used;
-            public Variable(Group group, bool used = false)
+            public bool isIO;
+            public Variable(Group group, bool used = false, bool isIO = false)
             {
                 this.group = group;
                 this.used = used;
+                this.isIO = isIO;
             }
         }
 
@@ -59,7 +61,7 @@ namespace Laba3Console
             try
             {
                 // поменяй путь
-                fstream = new FileStream(@"D:\Study\Metra\func.txt", FileMode.Open);
+                fstream = new FileStream(@"D:\Study\Metra\code.txt", FileMode.Open);
                 byte[] buffer = new byte[fstream.Length];
                 fstream.ReadAsync(buffer, 0, buffer.Length);
                 code = Encoding.Default.GetString(buffer);
@@ -253,6 +255,52 @@ namespace Laba3Console
                         foreach (var identifier in var_M)
                             if (!(variables.ContainsKey(identifier) && variables[identifier].group > Group.M))
                                 variables[identifier] = new Variable(Group.M, true);
+
+                        // помечаю IO те, которые в аргументах condole.log
+                        int j = i - 1;
+                        while (j > 0 && (char.IsLetter(code[j]) || code[j] == '.')) j--;
+                        if (code.Substring(j, i - j).Contains("console.log"))
+                        {
+                            j = i + 1;
+                            int funcCall = 1, prevFuncCall = 1, brackCount = 0;
+                            int start = j, stop;
+                            while (funcCall >= 0)
+                            {
+                                if (funcCall > 1 && prevFuncCall == 1 || funcCall == 0)
+                                {
+                                    prevFuncCall = funcCall;
+                                    stop = j;
+                                    HashSet<string> var_IO = GetIdentifiers(code.Substring(start, stop - start + 1));
+                                    foreach (var identifier in var_IO)
+                                        variables[identifier].isIO = true;
+                                    if (funcCall == 0)
+                                        funcCall--;
+                                }
+                                if (funcCall > 0)
+                                {
+                                    if (funcCall == 1 && prevFuncCall > 1)
+                                    {
+                                        prevFuncCall = funcCall;
+                                        start = j;
+                                    }
+                                    if (code[j + 1] == '(')
+                                    {
+                                        if (char.IsLetter(code[j]))
+                                            funcCall++;
+                                        else
+                                            brackCount++;
+                                    }
+                                    else if (code[j] == ')')
+                                    {
+                                        if (brackCount > 0)
+                                            brackCount--;
+                                        else
+                                            funcCall--;
+                                    }
+                                    j++;
+                                }
+                            }
+                        }
                         i = closeBracket;
                     }
                     else if (i < code.Length - "return".Length && code.Substring(i, "return".Length) == "return" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "return".Length]))
@@ -285,7 +333,7 @@ namespace Laba3Console
                     variable.Value.group = Group.T;
 
             foreach (var variable in variables)
-                Console.WriteLine($"{variable.Key}: {variable.Value.group}");
+                Console.WriteLine($"{variable.Key}: {variable.Value.group}, IO: {variable.Value.isIO}");
         }
     }
 }
