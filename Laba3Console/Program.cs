@@ -11,7 +11,7 @@ namespace Laba3Console
     {
         public static readonly HashSet<string> reservedNames = new HashSet<string>{ "function", "number", "string", 
             "boolean", "any", "Array", "void", "let", "return", "const", "for", "while", "if", "else", "switch", "case", 
-            "default", "break" };
+            "default", "break", "on" };
         
         // регулярное выражение для идентификатора переменной (исключает функции и атрибуты объектов)
         public static readonly string identifierTemplate = @"(?<!['"".])\b(?<name>[a-zA-Z_][a-zA-Z0-9_]*)(?![\w(])\b(?![.'""])";
@@ -55,13 +55,13 @@ namespace Laba3Console
         static void Main(string[] args)
         {
 
-
+             
             FileStream? fstream = null;
             string? code;
             try
             {
                 // поменяй путь
-                fstream = new FileStream(@"D:\Study\Metra\code.txt", FileMode.Open);
+                fstream = new FileStream(@"C:\Users\User\Desktop\Еще shit\4 сем\Метра\Metra3\tests\on+question.txt", FileMode.Open);
                 byte[] buffer = new byte[fstream.Length];
                 fstream.ReadAsync(buffer, 0, buffer.Length);
                 code = Encoding.Default.GetString(buffer);
@@ -72,12 +72,23 @@ namespace Laba3Console
             }
 
             Dictionary<string, Variable> variables = new Dictionary<string, Variable>();
-
             Console.WriteLine(code);
             Console.WriteLine("-----------------");
 
             for (int i = 0; i < code.Length; i++)
             {
+                if (i < code.Length - "on".Length && code.Substring(i, "on".Length) == "on" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "on".Length]) ||
+                    i < code.Length - "question".Length && code.Substring(i, "question".Length) == "question" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "question".Length]))
+                {
+                    i+=3;
+                    while (code[i] != '(') i++;
+                    bool noBreak;
+                    int closeBracket = Jilb.CloseBracketInd(code, i, "(", out noBreak);
+                    HashSet<string> var_C = GetIdentifiers(code.Substring(i + 1, closeBracket - i - 1));
+                    foreach (var identifier in var_C)
+                        variables[identifier] = new Variable(Group.P, true, true);
+                    i = closeBracket;
+                }
                 // Управляющие (группа С) переменные
                 if (i < code.Length - "if".Length && code.Substring(i, "if".Length) == "if" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "if".Length]) ||
                     i < code.Length - "while".Length && code.Substring(i, "while".Length) == "while" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "while".Length]) ||
@@ -132,7 +143,7 @@ namespace Laba3Console
                         HashSet<string> var_M = GetIdentifiers(code.Substring(j, i - j - 1));
                         Console.WriteLine("левая: " + code.Substring(j, i - j - 1));
                         foreach (var identifier in var_M)
-                            if (!(variables.ContainsKey(identifier) && variables[identifier].group > Group.M))
+                            if (!(variables.ContainsKey(identifier)) && variables[identifier].group > Group.M)
                                 variables[identifier] = new Variable(Group.M, false);
 
                         // присваиваемые переменные (перестают быть паразитными)
@@ -157,19 +168,18 @@ namespace Laba3Console
                             }
                             j++;
                         }
-
-                        HashSet<string> var_notT = GetIdentifiers(code.Substring(i + 1, j - i - 1));
-                        Console.WriteLine("правая: " + code.Substring(i + 1, j - i - 1));
-                        foreach (var identifier in var_notT)
-                            if (variables.ContainsKey(identifier))
-                            {
-                                variables[identifier].used = true;
-                            }
-                            else
-                            {
-                                Console.WriteLine("используется необъявленная переменная: " + identifier);
-                                variables[identifier] = new Variable(Group.M, true);
-                            }
+                            HashSet<string> var_notT = GetIdentifiers(code.Substring(i + 1, j - i - 1));
+                            Console.WriteLine("правая: " + code.Substring(i + 1, j - i - 1));
+                            foreach (var identifier in var_notT)
+                                if (variables.ContainsKey(identifier))
+                                {
+                                    variables[identifier].used = true;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("используется необъявленная переменная: " + identifier);
+                                    variables[identifier] = new Variable(Group.M, true);
+                                }
                         i = j;
                     } 
                     // инкремент / декремент
