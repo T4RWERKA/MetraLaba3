@@ -1,3 +1,3 @@
 rl.on('history', (history) => {
-  console.log(`Received: ${history}`);
+  console.log( ${history});
 });

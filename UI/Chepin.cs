@@ -1,5 +1,6 @@
 ﻿using ConsoleApp1;
 using System.ComponentModel.Design;
+using System.Data;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace Laba3Console
 {
-    internal class Program
+    public class Program
     {
         public static readonly HashSet<string> reservedNames = new HashSet<string>{ "function", "number", "string", 
             "boolean", "any", "Array", "void", "let", "return", "const", "for", "while", "if", "else", "switch", "case", 
@@ -16,15 +17,15 @@ namespace Laba3Console
         // регулярное выражение для идентификатора переменной (исключает функции и атрибуты объектов)
         public static readonly string identifierTemplate = @"(?<!['"".])\b(?<name>[a-zA-Z_][a-zA-Z0-9_]*)(?![\w(])\b(?![.'""])";
         // public static readonly string identifierTemplate = @"(?<name>[a-zA-Z_][a-zA-Z0-9_]*)(?![\w(])";
-        enum Group
+        public enum Group
         {
             // приоритеты групп
-            P = 1,
-            M = 2,
+            P = 2,
+            M = 1,
             T = 3,
             C = 4
         }
-        class Variable
+        public class Variable
         {
             public Group group;
             public bool used;
@@ -36,7 +37,8 @@ namespace Laba3Console
                 this.isIO = isIO;
             }
         }
-
+        public static Dictionary<string, Variable> variables = new Dictionary<string, Variable>();
+        public static Dictionary<string, Variable> getVars() { return variables; }
         public static HashSet<string> GetIdentifiers(string code)
         {
             Regex regex = new Regex(identifierTemplate);
@@ -52,26 +54,9 @@ namespace Laba3Console
             }
             return result;
         }
-        static void Main(string[] args)
+
+        public static void Cycle(string code)
         {
-
-             
-            FileStream? fstream = null;
-            string? code;
-            try
-            {
-                // поменяй путь
-                fstream = new FileStream(@"C:\Users\User\Desktop\Еще shit\4 сем\Метра\Metra3\tests\on+question.txt", FileMode.Open);
-                byte[] buffer = new byte[fstream.Length];
-                fstream.ReadAsync(buffer, 0, buffer.Length);
-                code = Encoding.Default.GetString(buffer);
-            }
-            finally
-            {
-                fstream?.Close();
-            }
-
-            Dictionary<string, Variable> variables = new Dictionary<string, Variable>();
             Console.WriteLine(code);
             Console.WriteLine("-----------------");
 
@@ -143,7 +128,7 @@ namespace Laba3Console
                         HashSet<string> var_M = GetIdentifiers(code.Substring(j, i - j - 1));
                         Console.WriteLine("левая: " + code.Substring(j, i - j - 1));
                         foreach (var identifier in var_M)
-                            if (!(variables.ContainsKey(identifier)) && variables[identifier].group > Group.M)
+                            if (!(variables.ContainsKey(identifier) && variables[identifier].group > Group.M))
                                 variables[identifier] = new Variable(Group.M, false);
 
                         // присваиваемые переменные (перестают быть паразитными)
