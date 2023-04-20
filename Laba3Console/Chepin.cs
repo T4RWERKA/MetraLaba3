@@ -61,7 +61,7 @@ namespace Laba3Console
             try
             {
                 // поменяй путь
-                fstream = new FileStream(@"C:\Users\User\Desktop\Еще shit\4 сем\Метра\Metra_3\tests\on+question.txt", FileMode.Open);
+                fstream = new FileStream(@"D:\Study\Metra\Задание№3_МетрикиПотокаДанных\Laba3Console\tests\IO.txt", FileMode.Open);
                 byte[] buffer = new byte[fstream.Length];
                 fstream.ReadAsync(buffer, 0, buffer.Length);
                 code = Encoding.Default.GetString(buffer);
@@ -80,7 +80,6 @@ namespace Laba3Console
                 if (i < code.Length - "on".Length && code.Substring(i, "on".Length) == "on" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "on".Length]) ||
                     i < code.Length - "question".Length && code.Substring(i, "question".Length) == "question" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "question".Length]))
                 {
-                    i+=3;
                     while (code[i] != '(') i++;
                     bool noBreak;
                     int closeBracket = Jilb.CloseBracketInd(code, i, "(", out noBreak);

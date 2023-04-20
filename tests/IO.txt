@@ -1,1 +1,1 @@
-console.log(a, max(b, d), c);
+console.log(i * i);

@@ -15,7 +15,7 @@ namespace Laba3Console
             "default", "break", "on" };
         
         // регулярное выражение для идентификатора переменной (исключает функции и атрибуты объектов)
-        public static readonly string identifierTemplate = @"(?<!['"".])\b(?<name>[a-zA-Z_][a-zA-Z0-9_]*)(?![\w(])\b(?![.'""])";
+        public static readonly string identifierTemplate = @"(?<!['"".])\b(?<name>[a-zA-Z_][a-zA-Z0-9_]*)(?![\w(])\b";
         // public static readonly string identifierTemplate = @"(?<name>[a-zA-Z_][a-zA-Z0-9_]*)(?![\w(])";
         public enum Group
         {
