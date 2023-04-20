@@ -1,5 +1,7 @@
-const readl = readline.createInterface({ input, output });
+let readl = readline.createInterface({ input, output });
 readl.on(history);
+
+let amogus: number = 10;
 
 function heapSort(arr: number[]): void {  
     let heapSize = arr.length;  

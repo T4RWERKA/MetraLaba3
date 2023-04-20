@@ -61,7 +61,7 @@ namespace Laba3Console
             try
             {
                 // поменяй путь
-                fstream = new FileStream(@"D:\Study\Metra\Задание№3_МетрикиПотокаДанных\Laba3Console\tests\IO.txt", FileMode.Open);
+                fstream = new FileStream(@"D:\Study\Metra\Задание№3_МетрикиПотокаДанных\Laba3Console\tests\ass.txt", FileMode.Open);
                 byte[] buffer = new byte[fstream.Length];
                 fstream.ReadAsync(buffer, 0, buffer.Length);
                 code = Encoding.Default.GetString(buffer);
@@ -258,6 +258,23 @@ namespace Laba3Console
                     // вызов процедуры делает аргументы непаразитными
                     else if (i > 0 && code[i] == '(' && char.IsLetter(code[i - 1]))
                     {
+                        int j = i, dot = i;
+                        while (j > 0 && code[j] != ';')
+                        {
+                            if (code[j] == '.')
+                            {
+                                dot = j;
+                            }
+                            j--;
+                        }
+                        if (dot != i)
+                        {
+                            HashSet<string> identifiers = GetIdentifiers(code.Substring(j + 1, dot - j - 1));
+                            foreach (var identifier in identifiers)
+                                if (variables.ContainsKey(identifier))
+                                    variables[identifier].used = true;
+
+                        }
                         bool noBreak;
                         int closeBracket = Jilb.CloseBracketInd(code, i, "(", out noBreak);
                         HashSet<string> var_M = GetIdentifiers(code.Substring(i + 1, closeBracket - i - 1));
@@ -266,7 +283,7 @@ namespace Laba3Console
                                 variables[identifier] = new Variable(Group.M, true);
 
                         // помечаю IO те, которые в аргументах condole.log
-                        int j = i - 1;
+                        j = i - 1;
                         while (j > 0 && (char.IsLetter(code[j]) || code[j] == '.')) j--;
                         if (code.Substring(j, i - j).Contains("console.log"))
                         {

@@ -65,6 +65,24 @@ namespace Laba3Console
                 if (i < code.Length - "on".Length && code.Substring(i, "on".Length) == "on" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "on".Length]) ||
                     i < code.Length - "question".Length && code.Substring(i, "question".Length) == "question" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "question".Length]))
                 {
+                    // если вызывается метод объекта
+                    int j = i, dot = i;
+                    while (j > 0 && code[j] != ';')
+                    {
+                        if (code[j] == '.')
+                        {
+                            dot = j;
+                        }
+                        j--;
+                    }
+                    if (dot != i)
+                    {
+                        HashSet<string> identifiers = GetIdentifiers(code.Substring(j + 1, dot - j - 1));
+                        foreach (var identifier in identifiers)
+                            if (variables.ContainsKey(identifier))
+                                variables[identifier].used = true;
+                    }
+
                     while (code[i] != '(') i++;
                     bool noBreak;
                     int closeBracket = Jilb.CloseBracketInd(code, i, "(", out noBreak);
@@ -245,6 +263,24 @@ namespace Laba3Console
                     // вызов процедуры делает аргументы непаразитными
                     else if (i > 0 && code[i] == '(' && char.IsLetter(code[i - 1]))
                     {
+                        // если вызывается метод объекта
+                        int j = i, dot = i;
+                        while (j > 0 && code[j] != ';')
+                        {
+                            if (code[j] == '.')
+                            {
+                                dot = j;
+                            }
+                            j--;
+                        }
+                        if (dot != i)
+                        {
+                            HashSet<string> identifiers = GetIdentifiers(code.Substring(j + 1, dot - j - 1));
+                            foreach (var identifier in identifiers)
+                                if (variables.ContainsKey(identifier))
+                                    variables[identifier].used = true;
+                        }
+
                         bool noBreak;
                         int closeBracket = Jilb.CloseBracketInd(code, i, "(", out noBreak);
                         HashSet<string> var_M = GetIdentifiers(code.Substring(i + 1, closeBracket - i - 1));
@@ -253,7 +289,7 @@ namespace Laba3Console
                                 variables[identifier] = new Variable(Group.M, true);
 
                         // помечаю IO те, которые в аргументах condole.log
-                        int j = i - 1;
+                        j = i - 1;
                         while (j > 0 && (char.IsLetter(code[j]) || code[j] == '.')) j--;
                         if (code.Substring(j, i - j).Contains("console.log"))
                         {
