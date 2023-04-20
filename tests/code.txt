@@ -1,4 +1,3 @@
-let amogus: number = 10;
 const readl = readline.createInterface({ input, output });
 readl.on(history);
 function heapSort(arr: number[]): void {  
