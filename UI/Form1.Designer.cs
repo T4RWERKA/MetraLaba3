@@ -39,6 +39,8 @@
             tb4 = new TextBox();
             label3 = new Label();
             tb5 = new TextBox();
+            label4 = new Label();
+            tb6 = new RichTextBox();
             SuspendLayout();
             // 
             // tb1
@@ -82,9 +84,9 @@
             // 
             // tb3
             // 
-            tb3.Location = new Point(21, 12);
+            tb3.Location = new Point(21, 31);
             tb3.Name = "tb3";
-            tb3.Size = new Size(301, 313);
+            tb3.Size = new Size(301, 294);
             tb3.TabIndex = 4;
             tb3.Text = "";
             // 
@@ -116,7 +118,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(328, 15);
+            label3.Location = new Point(32, 448);
             label3.Name = "label3";
             label3.Size = new Size(104, 15);
             label3.TabIndex = 8;
@@ -124,16 +126,35 @@
             // 
             // tb5
             // 
-            tb5.Location = new Point(438, 12);
+            tb5.Location = new Point(142, 445);
             tb5.Name = "tb5";
-            tb5.Size = new Size(100, 23);
+            tb5.Size = new Size(60, 23);
             tb5.TabIndex = 9;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(28, 7);
+            label4.Name = "label4";
+            label4.Size = new Size(99, 15);
+            label4.TabIndex = 10;
+            label4.Text = "Метрика Чепина";
+            // 
+            // tb6
+            // 
+            tb6.Location = new Point(337, 31);
+            tb6.Name = "tb6";
+            tb6.Size = new Size(283, 294);
+            tb6.TabIndex = 11;
+            tb6.Text = "";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(975, 563);
+            Controls.Add(tb6);
+            Controls.Add(label4);
             Controls.Add(tb5);
             Controls.Add(label3);
             Controls.Add(tb4);
@@ -163,5 +184,7 @@
         private TextBox tb4;
         private Label label3;
         private TextBox tb5;
+        private Label label4;
+        private RichTextBox tb6;
     }
 }
