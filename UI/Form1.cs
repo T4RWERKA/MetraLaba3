@@ -74,7 +74,8 @@ namespace UI
             tb2.Text = $"{fullchp}";
             tb4.Text = $"{partchp}";
             tb5.Text = $"{fullspen}";
-
+            Laba3Console.Program.variables.Clear();
+            Halsted.OperandDictionary.Clear();
         }
     }
 }

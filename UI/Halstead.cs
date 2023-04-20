@@ -133,7 +133,7 @@ namespace UI
                             StringTmp += line[i++];
 
                         }
-                        while ((i < len) && (((line[i] >= '0') && (line[i] <= '9')) || ((line[i] >= 'A') && (line[i] <= 'Z')) || ((line[i] >= 'a') && (line[i] <= 'z')) || line[i] == '.' || line[i] == '_' || line[i] == '[' || line[i] == ']' || line[i] == '\\'));
+                        while ((i < len) && (((line[i] >= '0') && (line[i] <= '9')) || ((line[i] >= 'A') && (line[i] <= 'Z')) || ((line[i] >= 'a') && (line[i] <= 'z')) || line[i] == '_' || line[i] == '[' || line[i] == ']' || line[i] == '\\'));
 
                         if (line[i] == '(')
                             if (OperatorDictionary.ContainsKey(StringTmp))
