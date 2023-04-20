@@ -42,7 +42,7 @@ namespace UI
             double fullchp = 0;
             double partchp = 0;
             foreach (string str in code) txt += str;
-            Laba3Console.Program.Cycle(txt);
+                Laba3Console.Program.Cycle(txt);
             foreach (var str in vars)
             {
                 tb3.Text += $"{str.Key}: {str.Value.group}, IO: {str.Value.isIO} , spen: {Halsted.OperandDictionary[str.Key] - 1}" + '\n';

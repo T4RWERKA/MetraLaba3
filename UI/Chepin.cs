@@ -65,7 +65,6 @@ namespace Laba3Console
                 if (i < code.Length - "on".Length && code.Substring(i, "on".Length) == "on" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "on".Length]) ||
                     i < code.Length - "question".Length && code.Substring(i, "question".Length) == "question" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "question".Length]))
                 {
-                    i+=3;
                     while (code[i] != '(') i++;
                     bool noBreak;
                     int closeBracket = Jilb.CloseBracketInd(code, i, "(", out noBreak);
@@ -75,7 +74,7 @@ namespace Laba3Console
                     i = closeBracket;
                 }
                 // Управляющие (группа С) переменные
-                if (i < code.Length - "if".Length && code.Substring(i, "if".Length) == "if" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "if".Length]) ||
+                else if (i < code.Length - "if".Length && code.Substring(i, "if".Length) == "if" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "if".Length]) ||
                     i < code.Length - "while".Length && code.Substring(i, "while".Length) == "while" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "while".Length]) ||
                     i < code.Length - "for".Length && code.Substring(i, "for".Length) == "for" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "for".Length]) ||
                     i < code.Length - "switch".Length && code.Substring(i, "switch".Length) == "switch" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "switch".Length]))
