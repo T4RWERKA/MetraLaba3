@@ -85,7 +85,8 @@ namespace Laba3Console
 
                     HashSet<string> var_C = GetIdentifiers(code.Substring(i + 1, closeBracket - i - 1));
                     foreach (var identifier in var_C)
-                        variables[identifier] = new Variable(Group.C, true);
+                        if (!variables.ContainsKey(identifier) || variables[identifier].group < Group.C)
+                            variables[identifier] = new Variable(Group.C, true);
                     i = closeBracket;
                 }  
                 else if (i < code.Length - "case".Length && code.Substring(i, "case".Length) == "case" && (i > 0 ? !char.IsLetter(code[i - 1]) : true) && !char.IsLetter(code[i + "case".Length]))
@@ -94,8 +95,9 @@ namespace Laba3Console
                     while (code[j] != ':') j++;
 
                     HashSet<string> var_C = GetIdentifiers(code.Substring(i, j - i));
-                    foreach (var variable in var_C)
-                        variables[variable] = new Variable(Group.C, true);
+                    foreach (var identifier in var_C)
+                        if (!variables.ContainsKey(identifier) || variables[identifier].group < Group.C)
+                            variables[identifier] = new Variable(Group.C, true);
                     i = j;
                 }
                 // Модифицируемые переменные (группа M)

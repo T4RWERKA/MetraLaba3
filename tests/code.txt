@@ -1,5 +1,6 @@
 const readl = readline.createInterface({ input, output });
-    readl.on(history);
+readl.on(history);
+
 function heapSort(arr: number[]): void {  
     let heapSize = arr.length;  
     buildMaxHeap(arr);  
